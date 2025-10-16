@@ -348,6 +348,120 @@
         .theme-toggle[data-theme="dark"] {
             color: var(--accent-color);
         }
+
+        #seletor-frete {
+            background: var(--section-bg);
+            padding: 15px;
+            margin-top: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        #seletor-frete h4 {
+            margin: 0 0 10px;
+            color: var(--header-color);
+            font-size: 14px;
+        }
+
+        #seletor-frete div {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        #seletor-frete select, #seletor-frete button {
+            padding: 5px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+
+        #seletor-frete button {
+            background: #9370DB;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+
+        #seletor-frete button:hover {
+            background: #7B68EE;
+        }
+
+        #seletor-frete button:disabled {
+            background: var(--border-color);
+            cursor: not-allowed;
+        }
+
+        #info-frete {
+            margin: 5px 0;
+            color: green;
+            font-size: 14px;
+        }
+
+        .new-client-btn {
+            background: #17a2b8;
+            margin-bottom: 10px;
+        }
+
+        .new-client-btn:hover {
+            background: #138496;
+        }
+
+        .client-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: var(--section-bg);
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+        }
+
+        .client-section h3 {
+            margin-bottom: 10px;
+            color: var(--header-color);
+        }
+
+        .freteTable th:last-child,
+        .freteTable td:last-child {
+            width: 50px;
+        }
+
+        .delete-row-btn {
+            background-color: var(--error-color);
+            color: white;
+            border: none;
+            padding: 2px 6px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .delete-row-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .editing input {
+            background-color: white !important;
+            color: black !important;
+        }
+
+        .export-import-group {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .toggle-mgmt-btn {
+            background-color: #f39c12;
+            margin-bottom: 10px;
+        }
+
+        .toggle-mgmt-btn:hover {
+            background-color: #e67e22;
+        }
+
+        .mgmt-collapsed .clientFreightContainer,
+        .mgmt-collapsed .edit-buttons:not(:first-of-type) {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -478,6 +592,22 @@
                             <button id="subtractFreteBtn">-30% (Retorno)</button>
                         </div>
                     </div>
+                    <div id="seletor-frete">
+                        <h4>Selecionar Frete por Cliente/Rota</h4>
+                        <div>
+                            <select id="cliente-select">
+                                <option value="">Escolha um cliente...</option>
+                            </select>
+                            <select id="rota-select" disabled>
+                                <option value="">Escolha uma rota...</option>
+                            </select>
+                            <select id="veiculo-select" disabled>
+                                <option value="">Escolha o veículo...</option>
+                            </select>
+                            <button id="puxar-frete-btn" onclick="puxarFrete()" disabled>Puxar Frete Base</button>
+                        </div>
+                        <p id="info-frete"></p>
+                    </div>
                 </div>
                 
                 <div class="frete-result">
@@ -525,6 +655,26 @@
             </table>
             <div class="note">
                 <p><strong>Instruções:</strong> Clique em "Editar" para alterar os valores dos pedágios. Após as alterações, clique em "Salvar". Use "Adicionar Coluna" para criar novas rotas extras. Use "Restaurar" para voltar aos valores originais (remove colunas extras).</p>
+            </div>
+        </div>
+
+        <div class="table-container" id="frete-mgmt-container">
+            <h2>Gerenciamento de Fretes por Cliente</h2>
+            <button id="toggleFreteMgmt" class="toggle-mgmt-btn">Minimizar</button>
+            <p>Adicione e edite rotas, veículos e valores de frete manualmente. Cada cliente tem sua tabela separada.</p>
+            <div class="edit-buttons">
+                <button class="new-client-btn" id="addNewClientBtn">Criar Novo Cliente</button>
+                <div class="export-import-group">
+                    <button id="exportDataBtn" class="save-btn">Exportar Dados</button>
+                    <button id="importDataBtn" class="save-btn">Importar Dados</button>
+                </div>
+            </div>
+            <input type="file" id="importFile" accept=".json" style="display:none;">
+            <div id="clientFreightContainer" class="clientFreightContainer">
+                <!-- As seções de clientes serão populadas via JavaScript -->
+            </div>
+            <div class="note">
+                <p><strong>Instruções:</strong> Clique em "Criar Novo Cliente" para adicionar um cliente com tabela padrão. Para cada cliente, use "Adicionar Linha" para novas rotas/veículos, "Adicionar Coluna" para campos extras, "Deletar Coluna" (informe índice), e "X" nas linhas para deletar. Em "Editar", altere valores. "Salvar" persiste. "Restaurar Padrão" reseta para vazio. Use "Exportar Dados" para baixar um JSON com todos os dados salvos (tabelas, configurações). "Importar Dados" para carregar um JSON salvo.</p>
             </div>
         </div>
     </div>
@@ -645,10 +795,51 @@
                 {key: 'angraPonte', name: 'Angra via Ponte'}
             ];
 
-            // Carregar segmentos
-            let segments = loadData('segments', JSON.parse(JSON.stringify(originalSegments)));
+            // Dados iniciais de fretes (exemplos baseados na tabela Felka/Helix) - mantidos originais como array para seletor
+            const originalFreteDataArray = [
+                {cliente: 'Helix (Felka)', origem: 'Duque de Caxias', destino: 'Niterói', tipo: 'PICK-UP', capacidade: '500 kg', freteAtual: 538.20, estadia: 400.00, adv: 0.1},
+                {cliente: 'Helix (Felka)', origem: 'Duque de Caxias', destino: 'Niterói', tipo: 'SPRINTER OU SIMILAR', capacidade: '1500 KG', freteAtual: 765.44, estadia: 450.00, adv: 0.1},
+                {cliente: 'Helix (Felka)', origem: 'Duque de Caxias', destino: 'Niterói', tipo: 'TOCO', capacidade: '6 ton', freteAtual: 861.12, estadia: 550.00, adv: 0.1},
+                {cliente: 'Helix (Felka)', origem: 'Duque de Caxias', destino: 'Niterói', tipo: 'TRUCK', capacidade: '12 ton', freteAtual: 980.72, estadia: 650.00, adv: 0.1},
+                {cliente: 'Helix (Felka)', origem: 'Macaé', destino: 'Niterói', tipo: 'TRUCK', capacidade: '12 ton', freteAtual: 1913.60, estadia: 650.00, adv: 0.1}
+            ];
 
-            // Cópia dos dados para edição
+            // Converter para formato por cliente apenas se não existir em localStorage
+            let freteDataArray = loadData('freteDataArray', JSON.parse(JSON.stringify(originalFreteDataArray)));
+
+            // Construir estrutura por cliente a partir do array para edição
+            function buildClientDataFromArray() {
+                const clientData = {};
+                const standardColumnKeys = ['origem', 'destino', 'tipo', 'capacidade', 'freteAtual', 'estadia', 'adv'];
+                const standardColumnHeaders = ['Origem', 'Destino', 'Veículo', 'Capacidade', 'Frete Atual', 'Estadia', 'ADV (%)'];
+
+                freteDataArray.forEach(entry => {
+                    const client = entry.cliente;
+                    if (!clientData[client]) {
+                        clientData[client] = {
+                            columnKeys: [...standardColumnKeys],
+                            columnHeaders: [...standardColumnHeaders],
+                            rows: []
+                        };
+                    }
+                    clientData[client].rows.push({
+                        origem: entry.origem,
+                        destino: entry.destino,
+                        tipo: entry.tipo,
+                        capacidade: entry.capacidade,
+                        freteAtual: entry.freteAtual,
+                        estadia: entry.estadia,
+                        adv: entry.adv
+                    });
+                });
+
+                return clientData;
+            }
+
+            let freteClients = loadData('freteClients', buildClientDataFromArray());
+
+            // Carregar segmentos e tollData
+            let segments = loadData('segments', JSON.parse(JSON.stringify(originalSegments)));
             let tollData = loadData('tollData', JSON.parse(JSON.stringify(originalTollData)));
 
             // Garantir que tollData tenha todos os valores para os segmentos atuais
@@ -666,7 +857,7 @@
                 segmentNames[s.key] = s.name;
             });
 
-            // Elementos da interface
+            // Elementos da interface (pedágios)
             const calculateBtn = document.getElementById('calculateBtn');
             const selectAllBtn = document.getElementById('selectAllBtn');
             const clearAllBtn = document.getElementById('clearAllBtn');
@@ -677,6 +868,7 @@
             const addColumnBtn = document.getElementById('addColumnBtn');
             const tollTable = document.getElementById('tollTable');
             
+            // Elementos da interface (tributos e frete base)
             const calculateTributBtn = document.getElementById('calculateTributBtn');
             const addNfBtn = document.getElementById('addNfBtn');
             const copyTollBtn = document.getElementById('copyTollBtn');
@@ -686,6 +878,7 @@
             const addFreteBtn = document.getElementById('addFreteBtn');
             const subtractFreteBtn = document.getElementById('subtractFreteBtn');
             const copyFreteBtn = document.getElementById('copyFreteBtn');
+            const addNewClientBtn = document.getElementById('addNewClientBtn');
             
             const nfValueInput = document.getElementById('nfValue');
             const additionalNfValueInput = document.getElementById('additionalNfValue');
@@ -693,18 +886,36 @@
             const grissPercentInput = document.getElementById('grissPercent');
             const freteValueInput = document.getElementById('freteValue');
             
+            const clientFreightContainer = document.getElementById('clientFreightContainer');
+            
+            // Elementos para export/import
+            const exportDataBtn = document.getElementById('exportDataBtn');
+            const importDataBtn = document.getElementById('importDataBtn');
+            const importFile = document.getElementById('importFile');
+            
+            // Elemento para toggle gerenciamento
+            const toggleFreteMgmt = document.getElementById('toggleFreteMgmt');
+            const freteMgmtContainer = document.getElementById('frete-mgmt-container');
+            
             // Carregar valores salvos
             nfValueInput.value = loadData('nfValue', '') || '';
             advaloremPercentInput.value = loadData('advaloremPercent', '0.10');
             grissPercentInput.value = loadData('grissPercent', '0.05');
             freteValueInput.value = loadData('freteValue', '') || '';
             
+            // Carregar estado do toggle
+            const isCollapsed = loadData('freteMgmtCollapsed', false);
+            if (isCollapsed) {
+                freteMgmtContainer.classList.add('mgmt-collapsed');
+                toggleFreteMgmt.textContent = 'Expandir';
+            }
+            
             // Inicializar tema
             const savedTheme = loadData('theme', 'light');
             document.documentElement.setAttribute('data-theme', savedTheme);
             updateThemeToggle(savedTheme);
             
-            // Listeners
+            // Listeners (pedágios)
             calculateBtn.addEventListener('click', calculateToll);
             selectAllBtn.addEventListener('click', selectAllSegments);
             clearAllBtn.addEventListener('click', clearAllSegments);
@@ -714,6 +925,7 @@
             resetTableBtn.addEventListener('click', resetTableValues);
             addColumnBtn.addEventListener('click', addNewColumn);
             
+            // Listeners (tributos e frete)
             calculateTributBtn.addEventListener('click', calculateTribut);
             addNfBtn.addEventListener('click', addAdditionalNf);
             copyTollBtn.addEventListener('click', copyTollValues);
@@ -723,6 +935,22 @@
             addFreteBtn.addEventListener('click', () => calculateFrete('add'));
             subtractFreteBtn.addEventListener('click', () => calculateFrete('subtract'));
             copyFreteBtn.addEventListener('click', copyFreteValue);
+            
+            // Listener para novo cliente
+            addNewClientBtn.addEventListener('click', addNewClient);
+            
+            // Listeners para export/import
+            exportDataBtn.addEventListener('click', exportData);
+            importDataBtn.addEventListener('click', () => importFile.click());
+            importFile.addEventListener('change', handleImportFile);
+            
+            // Listener para toggle gerenciamento
+            toggleFreteMgmt.addEventListener('click', function() {
+                freteMgmtContainer.classList.toggle('mgmt-collapsed');
+                const collapsed = freteMgmtContainer.classList.contains('mgmt-collapsed');
+                this.textContent = collapsed ? 'Expandir' : 'Minimizar';
+                saveData('freteMgmtCollapsed', collapsed);
+            });
             
             advaloremPercentInput.addEventListener('input', function() {
                 document.getElementById('advaloremPercentDisplay').textContent = this.value;
@@ -746,9 +974,16 @@
             document.getElementById('themeToggle').addEventListener('click', toggleTheme);
             document.getElementById('vehicleType').addEventListener('change', calculateToll);
             
+            // Listener para seletor de frete
+            document.getElementById('cliente-select').addEventListener('change', handleClienteChange);
+            document.getElementById('rota-select').addEventListener('change', handleRotaChange);
+            document.getElementById('veiculo-select').addEventListener('change', handleVeiculoChange);
+            
             // Inicializar
             populateCheckboxes();
             populateTable();
+            populateFreightTables();
+            popularClientes();
             calculateToll();
             calculateTribut();
             calculateFrete();
@@ -759,7 +994,7 @@
                 try {
                     return JSON.parse(item);
                 } catch {
-                    return item;
+                    return defaultValue;
                 }
             }
             
@@ -767,6 +1002,76 @@
                 localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
             }
             
+            // Função para sincronizar array e clients
+            function syncFreteData() {
+                freteDataArray = [];
+                Object.keys(freteClients).forEach(clientName => {
+                    freteClients[clientName].rows.forEach(row => {
+                        const entry = {
+                            cliente: clientName,
+                            origem: row.origem,
+                            destino: row.destino,
+                            tipo: row.tipo,
+                            capacidade: row.capacidade,
+                            freteAtual: row.freteAtual,
+                            estadia: row.estadia,
+                            adv: row.adv
+                        };
+                        freteDataArray.push(entry);
+                    });
+                });
+                saveData('freteDataArray', freteDataArray);
+                saveData('freteClients', freteClients);
+            }
+            
+            // Função para exportar dados
+            function exportData() {
+                const data = {
+                    freteClients: localStorage.getItem('freteClients'),
+                    freteDataArray: localStorage.getItem('freteDataArray'),
+                    tollData: localStorage.getItem('tollData'),
+                    segments: localStorage.getItem('segments'),
+                    theme: localStorage.getItem('theme'),
+                    nfValue: localStorage.getItem('nfValue'),
+                    advaloremPercent: localStorage.getItem('advaloremPercent'),
+                    grissPercent: localStorage.getItem('grissPercent'),
+                    freteValue: localStorage.getItem('freteValue')
+                };
+                const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'dados-calculadora.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                alert('Dados exportados com sucesso! Baixe o arquivo JSON.');
+            }
+            
+            // Função para importar dados
+            function handleImportFile(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    try {
+                        const data = JSON.parse(event.target.result);
+                        Object.keys(data).forEach(key => {
+                            if (data[key] !== null) {
+                                localStorage.setItem(key, data[key]);
+                            }
+                        });
+                        alert('Dados importados com sucesso! Recarregando a página...');
+                        location.reload();
+                    } catch (err) {
+                        alert('Erro ao importar dados: ' + err.message + '. Verifique se o arquivo é um JSON válido.');
+                    }
+                };
+                reader.readAsText(file);
+            }
+            
+            // Funções para pedágios (mantidas iguais)
             function populateCheckboxes() {
                 const checkboxGroup = document.querySelector('.checkbox-group');
                 checkboxGroup.innerHTML = '';
@@ -778,7 +1083,6 @@
                     checkboxGroup.appendChild(div);
                 });
                 
-                // Adicionar listeners para os checkboxes
                 document.querySelectorAll('.checkbox-item input').forEach(cb => {
                     cb.addEventListener('change', calculateToll);
                 });
@@ -786,13 +1090,10 @@
             
             function populateTable() {
                 const thead = tollTable.querySelector('thead tr');
-                
-                // Manter as duas primeiras colunas fixas (Veículo e Eixos) e limpar as demais
                 while (thead.children.length > 2) {
                     thead.removeChild(thead.lastChild);
                 }
                 
-                // Adicionar th para cada segmento
                 segments.forEach(seg => {
                     const th = document.createElement('th');
                     th.textContent = seg.name;
@@ -845,24 +1146,466 @@
                 
                 segments.push(newSeg);
                 
-                // Adicionar valor inicial 0 para todos os veículos
                 Object.keys(tollData).forEach(vk => {
                     tollData[vk].values[newKey] = 0;
                 });
                 
                 segmentNames[newKey] = name.trim();
                 
-                // Repopular
                 populateCheckboxes();
                 populateTable();
                 
-                // Salvar
                 saveData('segments', segments);
                 saveData('tollData', tollData);
                 
                 alert('Nova coluna adicionada com sucesso!');
             }
             
+            function enableTableEditing() {
+                const inputs = tollTable.querySelectorAll('input');
+                inputs.forEach(input => {
+                    input.disabled = false;
+                    input.parentElement.classList.add('editing');
+                });
+                
+                editTableBtn.style.display = 'none';
+                saveTableBtn.style.display = 'inline-block';
+                cancelEditBtn.style.display = 'inline-block';
+            }
+            
+            function saveTableValues() {
+                const inputs = tollTable.querySelectorAll('input');
+                inputs.forEach(input => {
+                    input.disabled = true;
+                    input.parentElement.classList.remove('editing');
+                    const vehicleKey = input.parentElement.dataset.vehicle;
+                    const segmentKey = input.parentElement.dataset.segment;
+                    
+                    const rawValue = input.value.replace('R$ ', '').trim();
+                    const value = parseFloat(rawValue.replace(',', '.'));
+                    
+                    if (!isNaN(value)) {
+                        tollData[vehicleKey].values[segmentKey] = value;
+                        input.value = formatCurrencyValue(value);
+                    }
+                });
+                
+                saveData('tollData', tollData);
+                
+                editTableBtn.style.display = 'inline-block';
+                saveTableBtn.style.display = 'none';
+                cancelEditBtn.style.display = 'none';
+                
+                calculateToll();
+                
+                alert('Valores atualizados com sucesso!');
+            }
+            
+            function cancelTableEditing() {
+                populateTable();
+                editTableBtn.style.display = 'inline-block';
+                saveTableBtn.style.display = 'none';
+                cancelEditBtn.style.display = 'none';
+            }
+            
+            function resetTableValues() {
+                if (confirm('Tem certeza que deseja restaurar os valores originais? Isso removerá colunas extras adicionadas.')) {
+                    segments = JSON.parse(JSON.stringify(originalSegments));
+                    tollData = JSON.parse(JSON.stringify(originalTollData));
+                    segmentNames = {};
+                    segments.forEach(s => segmentNames[s.key] = s.name);
+                    saveData('segments', segments);
+                    saveData('tollData', tollData);
+                    populateCheckboxes();
+                    populateTable();
+                    calculateToll();
+                    alert('Valores restaurados com sucesso!');
+                }
+            }
+            
+            // Funções para fretes por cliente
+            function populateFreightTables() {
+                clientFreightContainer.innerHTML = '';
+                
+                Object.keys(freteClients).forEach(clientName => {
+                    const section = createClientSection(clientName, freteClients[clientName]);
+                    clientFreightContainer.appendChild(section);
+                });
+            }
+
+            function createClientSection(clientName, clientData) {
+                const section = document.createElement('div');
+                section.className = 'client-section';
+                section.dataset.client = clientName;
+
+                const title = document.createElement('h3');
+                title.textContent = clientName;
+                section.appendChild(title);
+
+                const buttonsDiv = document.createElement('div');
+                buttonsDiv.className = 'edit-buttons';
+
+                const buttonConfigs = [
+                    {type: 'edit', class: 'save-btn', text: 'Editar'},
+                    {type: 'save', class: 'save-btn', text: 'Salvar', style: 'display:none;'},
+                    {type: 'cancel', class: 'reset-btn', text: 'Cancelar', style: 'display:none;'},
+                    {type: 'reset', class: 'reset-btn', text: 'Restaurar Padrão'},
+                    {type: 'addRow', class: 'save-btn', text: 'Adicionar Linha'},
+                    {type: 'addColumn', class: 'save-btn', text: 'Adicionar Coluna'},
+                    {type: 'deleteColumn', class: 'reset-btn', text: 'Deletar Coluna'},
+                    {type: 'deleteClient', class: 'reset-btn', text: 'Deletar Cliente'}
+                ];
+
+                buttonConfigs.forEach(config => {
+                    const btn = document.createElement('button');
+                    btn.className = config.class;
+                    btn.textContent = config.text;
+                    if (config.style) btn.style.display = config.style;
+                    btn.dataset.client = clientName;
+                    btn.dataset.type = config.type;
+                    buttonsDiv.appendChild(btn);
+                });
+
+                section.appendChild(buttonsDiv);
+
+                const table = document.createElement('table');
+                table.className = 'freteTable';
+                table.dataset.client = clientName;
+
+                const thead = document.createElement('thead');
+                const headerRow = document.createElement('tr');
+                clientData.columnHeaders.forEach(header => {
+                    const th = document.createElement('th');
+                    th.textContent = header;
+                    headerRow.appendChild(th);
+                });
+                // Coluna para deletar linha
+                const deleteHeader = document.createElement('th');
+                deleteHeader.textContent = 'Ações';
+                headerRow.appendChild(deleteHeader);
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+
+                const tbody = document.createElement('tbody');
+                clientData.rows.forEach((row, rowIndex) => {
+                    const tr = document.createElement('tr');
+                    tr.dataset.rowIndex = rowIndex;
+
+                    clientData.columnKeys.forEach(key => {
+                        const td = document.createElement('td');
+                        td.className = 'editable-cell';
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        let val = row[key];
+                        if (key === 'freteAtual' || key === 'estadia') {
+                            input.value = formatCurrencyValue(val);
+                        } else if (key === 'adv') {
+                            input.value = parseFloat(val).toFixed(2).replace('.', ',');
+                        } else {
+                            input.value = val || '';
+                        }
+                        input.disabled = true;
+                        td.appendChild(input);
+                        tr.appendChild(td);
+                    });
+
+                    // Botão deletar linha
+                    const actionTd = document.createElement('td');
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'X';
+                    deleteBtn.className = 'delete-row-btn';
+                    deleteBtn.dataset.client = clientName;
+                    deleteBtn.dataset.rowIndex = rowIndex;
+                    actionTd.appendChild(deleteBtn);
+                    tr.appendChild(actionTd);
+
+                    tbody.appendChild(tr);
+                });
+
+                table.appendChild(tbody);
+                section.appendChild(table);
+
+                // Adicionar listeners para botões deste cliente
+                buttonsDiv.querySelectorAll('button').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const type = e.target.dataset.type;
+                        const cName = e.target.dataset.client;
+                        switch (type) {
+                            case 'edit': enableFreteEditing(cName); break;
+                            case 'save': saveFreteValues(cName); break;
+                            case 'cancel': cancelFreteEditing(cName); break;
+                            case 'reset': resetClientFrete(cName); break;
+                            case 'addRow': addFreteRow(cName); break;
+                            case 'addColumn': addFreteColumn(cName); break;
+                            case 'deleteColumn': deleteFreteColumn(cName); break;
+                            case 'deleteClient': deleteClient(cName); break;
+                        }
+                    });
+                });
+
+                // Listeners para deletar linhas
+                table.querySelectorAll('.delete-row-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const cName = e.target.dataset.client;
+                        const rIndex = parseInt(e.target.dataset.rowIndex);
+                        deleteFreteRow(cName, rIndex);
+                    });
+                });
+
+                return section;
+            }
+
+            function enableFreteEditing(clientName) {
+                const table = document.querySelector(`table[data-client="${clientName}"]`);
+                const inputs = table.querySelectorAll('input:not(.delete-row-btn)');
+                inputs.forEach(input => {
+                    input.disabled = false;
+                    input.parentElement.classList.add('editing');
+                });
+
+                const buttonsDiv = document.querySelector(`.client-section[data-client="${clientName}"] .edit-buttons`);
+                buttonsDiv.querySelector('[data-type="edit"]').style.display = 'none';
+                buttonsDiv.querySelector('[data-type="save"]').style.display = 'inline-block';
+                buttonsDiv.querySelector('[data-type="cancel"]').style.display = 'inline-block';
+            }
+
+            function saveFreteValues(clientName) {
+                const table = document.querySelector(`table[data-client="${clientName}"]`);
+                const tbody = table.querySelector('tbody');
+                const rows = tbody.querySelectorAll('tr');
+                const clientData = freteClients[clientName];
+                clientData.rows = [];
+
+                rows.forEach(tr => {
+                    const rowData = {};
+                    const cells = tr.querySelectorAll('td:not(:last-child)');
+                    clientData.columnKeys.forEach((key, colIndex) => {
+                        const input = cells[colIndex].querySelector('input');
+                        let val = input.value.trim();
+                        if (key === 'freteAtual' || key === 'estadia' || key === 'adv') {
+                            val = parseFloat(val.replace(',', '.')) || 0;
+                        }
+                        rowData[key] = val;
+                        // Atualizar input para exibição
+                        if (key === 'freteAtual' || key === 'estadia') {
+                            input.value = formatCurrencyValue(val);
+                        } else if (key === 'adv') {
+                            input.value = val.toFixed(2).replace('.', ',');
+                        }
+                    });
+
+                    // Adicionar apenas se não vazia
+                    if (clientData.columnKeys.some(key => rowData[key] !== '' && rowData[key] != 0)) {
+                        clientData.rows.push(rowData);
+                    }
+                });
+
+                syncFreteData();
+                populateFreightTables();
+                popularClientes();
+                alert('Valores salvos com sucesso!');
+            }
+
+            function cancelFreteEditing(clientName) {
+                populateFreightTables();
+            }
+
+            function resetClientFrete(clientName) {
+                if (confirm('Restaurar para padrão vazio?')) {
+                    freteClients[clientName] = {
+                        columnKeys: ['origem', 'destino', 'tipo', 'capacidade', 'freteAtual', 'estadia', 'adv'],
+                        columnHeaders: ['Origem', 'Destino', 'Veículo', 'Capacidade', 'Frete Atual', 'Estadia', 'ADV (%)'],
+                        rows: [{
+                            origem: '', destino: '', tipo: '', capacidade: '', freteAtual: 0, estadia: 0, adv: 0.1
+                        }]
+                    };
+                    syncFreteData();
+                    populateFreightTables();
+                    popularClientes();
+                    alert('Restaurado!');
+                }
+            }
+
+            function addFreteRow(clientName) {
+                const clientData = freteClients[clientName];
+                const emptyRow = {
+                    origem: '', destino: '', tipo: '', capacidade: '', freteAtual: 0, estadia: 0, adv: 0.1
+                };
+                clientData.rows.push(emptyRow);
+                syncFreteData();
+                populateFreightTables();
+            }
+
+            function addFreteColumn(clientName) {
+                const newHeader = prompt('Nome da nova coluna:');
+                if (!newHeader || newHeader.trim() === '') return;
+                const newKey = newHeader.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+                const clientData = freteClients[clientName];
+                clientData.columnHeaders.push(newHeader.trim());
+                clientData.columnKeys.push(newKey);
+                clientData.rows.forEach(row => {
+                    row[newKey] = '';
+                });
+                syncFreteData();
+                populateFreightTables();
+                alert('Coluna adicionada!');
+            }
+
+            function deleteFreteColumn(clientName) {
+                const clientData = freteClients[clientName];
+                const colIndexStr = prompt(`Índice da coluna a deletar (0 a ${clientData.columnHeaders.length - 1}):`);
+                const colIndex = parseInt(colIndexStr);
+                if (isNaN(colIndex) || colIndex < 0 || colIndex >= clientData.columnHeaders.length) {
+                    alert('Índice inválido!');
+                    return;
+                }
+                const colToDelete = clientData.columnHeaders[colIndex];
+                if (!confirm(`Deletar coluna "${colToDelete}"?`)) return;
+                const keyToDelete = clientData.columnKeys[colIndex];
+                clientData.columnKeys.splice(colIndex, 1);
+                clientData.columnHeaders.splice(colIndex, 1);
+                clientData.rows.forEach(row => delete row[keyToDelete]);
+                syncFreteData();
+                populateFreightTables();
+                alert('Coluna deletada!');
+            }
+
+            function deleteFreteRow(clientName, rowIndex) {
+                if (confirm('Deletar esta linha?')) {
+                    freteClients[clientName].rows.splice(rowIndex, 1);
+                    syncFreteData();
+                    populateFreightTables();
+                    popularClientes();
+                }
+            }
+
+            function deleteClient(clientName) {
+                if (confirm(`Deletar cliente "${clientName}" e sua tabela?`)) {
+                    delete freteClients[clientName];
+                    syncFreteData();
+                    populateFreightTables();
+                    popularClientes();
+                    alert('Cliente deletado!');
+                }
+            }
+
+            function addNewClient() {
+                const nomeCliente = prompt('Nome do novo cliente:');
+                if (!nomeCliente || nomeCliente.trim() === '') {
+                    alert('Nome obrigatório.');
+                    return;
+                }
+                if (freteClients[nomeCliente.trim()]) {
+                    alert('Cliente já existe.');
+                    return;
+                }
+                freteClients[nomeCliente.trim()] = {
+                    columnKeys: ['origem', 'destino', 'tipo', 'capacidade', 'freteAtual', 'estadia', 'adv'],
+                    columnHeaders: ['Origem', 'Destino', 'Veículo', 'Capacidade', 'Frete Atual', 'Estadia', 'ADV (%)'],
+                    rows: [{
+                        origem: 'Nova Origem', destino: 'Novo Destino', tipo: 'Novo Veículo', capacidade: 'Nova Capacidade', freteAtual: 0, estadia: 0, adv: 0.1
+                    }]
+                };
+                syncFreteData();
+                populateFreightTables();
+                popularClientes();
+                alert(`Cliente "${nomeCliente}" criado! Edite a tabela.`);
+            }
+            
+            // Funções para seletor de frete (usando array)
+            function popularClientes() {
+                const selectCliente = document.getElementById('cliente-select');
+                const uniqueClientes = [...new Set(freteDataArray.map(entry => entry.cliente))];
+                selectCliente.innerHTML = '<option value="">Escolha um cliente...</option>';
+                
+                uniqueClientes.forEach(cliente => {
+                    const option = document.createElement('option');
+                    option.value = cliente;
+                    option.textContent = cliente;
+                    selectCliente.appendChild(option);
+                });
+            }
+            
+            function handleClienteChange() {
+                const nomeCliente = this.value;
+                const selectRota = document.getElementById('rota-select');
+                const selectVeiculo = document.getElementById('veiculo-select');
+                const btnPuxar = document.getElementById('puxar-frete-btn');
+                
+                selectRota.innerHTML = '<option value="">Escolha uma rota...</option>';
+                selectVeiculo.innerHTML = '<option value="">Escolha o veículo...</option>';
+                selectRota.disabled = !nomeCliente;
+                selectVeiculo.disabled = true;
+                btnPuxar.disabled = true;
+                
+                if (nomeCliente) {
+                    const rotasCliente = freteDataArray
+                        .filter(entry => entry.cliente === nomeCliente)
+                        .map(entry => ({origem: entry.origem, destino: entry.destino}))
+                        .filter((rota, index, self) => index === self.findIndex(r => r.origem === rota.origem && r.destino === rota.destino));
+                    
+                    rotasCliente.forEach(rota => {
+                        const option = document.createElement('option');
+                        option.value = JSON.stringify(rota);
+                        option.textContent = `${rota.origem} x ${rota.destino}`;
+                        selectRota.appendChild(option);
+                    });
+                }
+            }
+            
+            function handleRotaChange() {
+                const dadosRota = JSON.parse(this.value || '{}');
+                const selectVeiculo = document.getElementById('veiculo-select');
+                const btnPuxar = document.getElementById('puxar-frete-btn');
+                const nomeCliente = document.getElementById('cliente-select').value;
+                
+                selectVeiculo.innerHTML = '<option value="">Escolha o veículo...</option>';
+                selectVeiculo.disabled = !dadosRota.origem;
+                btnPuxar.disabled = true;
+                
+                if (dadosRota.origem && nomeCliente) {
+                    const veiculosRota = freteDataArray.filter(entry => 
+                        entry.cliente === nomeCliente && 
+                        entry.origem === dadosRota.origem && 
+                        entry.destino === dadosRota.destino
+                    );
+                    
+                    veiculosRota.forEach(veiculo => {
+                        const option = document.createElement('option');
+                        option.value = JSON.stringify({tipo: veiculo.tipo, frete: veiculo.freteAtual, adv: veiculo.adv});
+                        option.textContent = `${veiculo.tipo} (${veiculo.capacidade}) - ADV: ${(veiculo.adv * 100).toFixed(2)}%`;
+                        selectVeiculo.appendChild(option);
+                    });
+                }
+            }
+            
+            function handleVeiculoChange() {
+                document.getElementById('puxar-frete-btn').disabled = !this.value;
+            }
+            
+            window.puxarFrete = function() {
+                const dadosVeiculoStr = document.getElementById('veiculo-select').value;
+                const dadosVeiculo = JSON.parse(dadosVeiculoStr || '{}');
+                if (!dadosVeiculo.frete) return;
+                
+                const freteValue = dadosVeiculo.frete.toFixed(2).replace('.', ',');
+                freteValueInput.value = freteValue;
+                saveData('freteValue', freteValue);
+                
+                // Puxar ADV para Advalorem
+                const advPercent = (dadosVeiculo.adv * 100).toFixed(2).replace('.', ',');
+                advaloremPercentInput.value = advPercent;
+                saveData('advaloremPercent', advPercent);
+                document.getElementById('advaloremPercentDisplay').textContent = advPercent;
+                
+                calculateFrete();
+                calculateTribut();
+                
+                document.getElementById('info-frete').textContent = `Frete base puxado: R$ ${dadosVeiculo.frete.toFixed(2)} | ADV puxado: ${advPercent}% (${dadosVeiculo.tipo})`;
+                document.getElementById('puxar-frete-btn').disabled = true;
+            };
+            
+            // Funções para tributos e frete (mantidas iguais)
             function handleNfInput(e) {
                 let value = e.target.value.replace(/[^0-9,]/g, '');
                 if (value.includes(',')) {
@@ -939,75 +1682,17 @@
                 document.documentElement.setAttribute('data-theme', newTheme);
                 updateThemeToggle(newTheme);
                 saveData('theme', newTheme);
+                // Re-aplicar classes editing se necessário
+                document.querySelectorAll('.editing input').forEach(input => {
+                    input.style.backgroundColor = newTheme === 'dark' ? '#444' : 'white';
+                    input.style.color = newTheme === 'dark' ? '#fff' : 'black';
+                });
             }
             
             function updateThemeToggle(theme) {
                 const toggle = document.getElementById('themeToggle');
                 toggle.textContent = theme === 'dark' ? '☀️' : '🌙';
                 toggle.title = theme === 'dark' ? 'Modo claro' : 'Modo escuro';
-            }
-            
-            function enableTableEditing() {
-                const inputs = tollTable.querySelectorAll('input');
-                inputs.forEach(input => {
-                    input.disabled = false;
-                    input.style.backgroundColor = '#fff';
-                });
-                
-                editTableBtn.style.display = 'none';
-                saveTableBtn.style.display = 'inline-block';
-                cancelEditBtn.style.display = 'inline-block';
-            }
-            
-            function saveTableValues() {
-                const inputs = tollTable.querySelectorAll('input');
-                inputs.forEach(input => {
-                    input.disabled = true;
-                    input.style.backgroundColor = '';
-                    
-                    const vehicleKey = input.parentElement.dataset.vehicle;
-                    const segmentKey = input.parentElement.dataset.segment;
-                    
-                    const rawValue = input.value.replace('R$ ', '').trim();
-                    const value = parseFloat(rawValue.replace(',', '.'));
-                    
-                    if (!isNaN(value)) {
-                        tollData[vehicleKey].values[segmentKey] = value;
-                        input.value = formatCurrencyValue(value);
-                    }
-                });
-                
-                saveData('tollData', tollData);
-                
-                editTableBtn.style.display = 'inline-block';
-                saveTableBtn.style.display = 'none';
-                cancelEditBtn.style.display = 'none';
-                
-                calculateToll();
-                
-                alert('Valores atualizados com sucesso!');
-            }
-            
-            function cancelTableEditing() {
-                populateTable();
-                editTableBtn.style.display = 'inline-block';
-                saveTableBtn.style.display = 'none';
-                cancelEditBtn.style.display = 'none';
-            }
-            
-            function resetTableValues() {
-                if (confirm('Tem certeza que deseja restaurar os valores originais? Isso removerá colunas extras adicionadas.')) {
-                    segments = JSON.parse(JSON.stringify(originalSegments));
-                    tollData = JSON.parse(JSON.stringify(originalTollData));
-                    segmentNames = {};
-                    segments.forEach(s => segmentNames[s.key] = s.name);
-                    saveData('segments', segments);
-                    saveData('tollData', tollData);
-                    populateCheckboxes();
-                    populateTable();
-                    calculateToll();
-                    alert('Valores restaurados com sucesso!');
-                }
             }
             
             function calculateToll() {
