@@ -205,7 +205,7 @@
         }
         
         .result-item:last-child {
-            border-bottom: none;
+            border-bottom = none;
         }
         
         .result-label, .result-value {
@@ -589,6 +589,7 @@
                     <div class="form-group">
                         <div class="button-group">
                             <button id="addFreteBtn">+30% (Químicos)</button>
+                            <button id="addFrete20Btn">+20% (Perigosos)</button>
                             <button id="subtractFreteBtn">-30% (Retorno)</button>
                         </div>
                     </div>
@@ -619,6 +620,10 @@
                     <div class="result-item">
                         <span class="result-label">Adicional Químicos (30%):</span>
                         <span class="result-value" id="resultFreteChemical">R$ 0,00</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Adicional Perigosos (20%):</span>
+                        <span class="result-value" id="resultFreteDangerous">R$ 0,00</span>
                     </div>
                     <div class="result-item total">
                         <span class="result-label">Final:</span>
@@ -876,6 +881,7 @@
             const copyGrissBtn = document.getElementById('copyGrissBtn');
             const copyTributBtn = document.getElementById('copyTributBtn');
             const addFreteBtn = document.getElementById('addFreteBtn');
+            const addFrete20Btn = document.getElementById('addFrete20Btn');
             const subtractFreteBtn = document.getElementById('subtractFreteBtn');
             const copyFreteBtn = document.getElementById('copyFreteBtn');
             const addNewClientBtn = document.getElementById('addNewClientBtn');
@@ -933,6 +939,7 @@
             copyGrissBtn.addEventListener('click', () => copySingleValue('griss'));
             copyTributBtn.addEventListener('click', copyTributValues);
             addFreteBtn.addEventListener('click', () => calculateFrete('add'));
+            addFrete20Btn.addEventListener('click', () => calculateFrete('add20'));
             subtractFreteBtn.addEventListener('click', () => calculateFrete('subtract'));
             copyFreteBtn.addEventListener('click', copyFreteValue);
             
@@ -1752,16 +1759,21 @@
                 const freteValue = parseFloat(freteValueStr) || 0;
                 let freteTotal = freteValue;
                 let chemicalAdd = 0;
+                let dangerousAdd = 0;
                 
                 if (type === 'add') {
                     chemicalAdd = freteValue * 0.3;
                     freteTotal = freteValue * 1.3;
+                } else if (type === 'add20') {
+                    dangerousAdd = freteValue * 0.2;
+                    freteTotal = freteValue * 1.2;
                 } else if (type === 'subtract') {
                     freteTotal = freteValue * 0.7;
                 }
                 
                 document.getElementById('resultFreteBase').textContent = formatCurrency(freteValue);
                 document.getElementById('resultFreteChemical').textContent = formatCurrency(chemicalAdd);
+                document.getElementById('resultFreteDangerous').textContent = formatCurrency(dangerousAdd);
                 document.getElementById('resultFreteTotal').textContent = formatCurrency(freteTotal);
             }
             
