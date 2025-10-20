@@ -51,7 +51,7 @@
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1600px; /* Aumentado para usar mais espaço horizontal */
             margin: 0 auto;
             background-color: var(--container-bg);
             border-radius: 6px;
@@ -91,19 +91,30 @@
         .main-content {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 15px;
+            gap: 20px; /* Aumentado o gap para mais espaçamento entre colunas */
+            min-width: 0; /* Garante que as colunas não transbordem */
         }
         
-        @media (max-width: 1100px) {
+        /* Ajuste no breakpoint para manter 3 colunas em telas mais largas (ex: >1200px) */
+        @media (max-width: 1200px) {
+            .main-content {
+                grid-template-columns: 1fr 1fr; /* 2 colunas em telas médias */
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 768px) { /* Stacked só em mobile real */
             .main-content {
                 grid-template-columns: 1fr;
+                gap: 15px;
             }
         }
         
         .input-section, .tribut-section, .frete-section {
             background-color: var(--section-bg);
-            padding: 12px;
+            padding: 15px; /* Aumentado padding interno para colunas mais "preenchidas" */
             border-radius: 5px;
+            min-width: 0; /* Previne overflow */
         }
         
         .tribut-section {
@@ -205,7 +216,7 @@
         }
         
         .result-item:last-child {
-            border-bottom = none;
+            border-bottom: none; /* Corrigido: era "=" em vez de ":" */
         }
         
         .result-label, .result-value {
