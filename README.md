@@ -19,29 +19,29 @@
             --success-bg: #d4edda;
             --error-color: #e74c3c;
         }
-      
+     
         [data-theme="dark"] {
-            --bg-color: #1a1a1a;
-            --text-color: #f0f0f0;
-            --container-bg: #2a2a2a;
-            --section-bg: #333;
-            --result-bg: #1e3a5f;
-            --tribut-bg: #1e4620;
-            --frete-bg: #4a1c1c;
-            --border-color: #555;
-            --header-color: #e0e0e0;
-            --accent-color: #60a5fa;
-            --highlight-bg: #4a3f00;
-            --success-bg: #2d5a2d;
+            --bg-color: #0a0a0a;
+            --text-color: #ffffff;
+            --container-bg: #1a1a1a;
+            --section-bg: #242424;
+            --result-bg: #6a1b9a;
+            --tribut-bg: #6a1b9a;
+            --frete-bg: #6a1b9a;
+            --border-color: #404040;
+            --header-color: #ffffff;
+            --accent-color: #2196f3;
+            --highlight-bg: #333333;
+            --success-bg: #4caf50;
         }
-      
+     
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-      
+     
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
@@ -49,7 +49,7 @@
             padding: 10px;
             transition: background-color 0.3s, color 0.3s;
         }
-      
+     
         .container {
             max-width: 1600px; /* Aumentado para usar mais espaço horizontal */
             margin: 0 auto;
@@ -58,14 +58,14 @@
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             padding: 15px;
         }
-      
+     
         h1 {
             text-align: center;
             color: var(--header-color);
             margin-bottom: 10px;
             font-size: 22px;
         }
-      
+     
         h2 {
             color: var(--header-color);
             margin: 10px 0 8px;
@@ -73,13 +73,13 @@
             border-bottom: 1px solid var(--accent-color);
             font-size: 16px;
         }
-      
+     
         h3 {
             color: var(--header-color);
             margin: 10px 0 6px;
             font-size: 14px;
         }
-      
+     
         .description {
             text-align: center;
             margin-bottom: 15px;
@@ -87,14 +87,14 @@
             opacity: 0.8;
             font-size: 13px;
         }
-      
+     
         .main-content {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 20px; /* Aumentado o gap para mais espaçamento entre colunas */
             min-width: 0; /* Garante que as colunas não transbordem */
         }
-      
+     
         /* Ajuste no breakpoint para manter 3 colunas em telas mais largas (ex: >1200px) */
         @media (max-width: 1200px) {
             .main-content {
@@ -102,40 +102,40 @@
                 gap: 15px;
             }
         }
-      
+     
         @media (max-width: 768px) { /* Stacked só em mobile real */
             .main-content {
                 grid-template-columns: 1fr;
                 gap: 15px;
             }
         }
-      
+     
         .input-section, .tribut-section, .frete-section {
             background-color: var(--section-bg);
             padding: 15px; /* Aumentado padding interno para colunas mais "preenchidas" */
             border-radius: 5px;
             min-width: 0; /* Previne overflow */
         }
-      
+     
         /* .tribut-section {
             background-color: var(--tribut-bg);
         }
-      
+     
         .frete-section {
             background-color: var(--frete-bg);
         } */
-      
+     
         .result-section, .tribut-result, .frete-result {
             background-color: var(--result-bg);
             padding: 12px;
             border-radius: 5px;
             margin-top: 10px;
         }
-      
+     
         .form-group {
             margin-bottom: 10px;
         }
-      
+     
         label {
             display: block;
             margin-bottom: 5px;
@@ -143,7 +143,7 @@
             color: var(--header-color);
             font-size: 13px;
         }
-      
+     
         select, input {
             width: 100%;
             padding: 8px;
@@ -153,20 +153,20 @@
             background-color: var(--container-bg);
             color: var(--text-color);
         }
-      
+     
         select:focus, input:focus {
             outline: none;
             border-color: var(--accent-color);
             box-shadow: 0 0 3px rgba(52, 152, 219, 0.5);
         }
-      
+     
         .checkbox-group {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
             margin-top: 6px;
         }
-      
+     
         .checkbox-item {
             display: flex;
             align-items: center;
@@ -176,12 +176,12 @@
             border: 1px solid var(--border-color);
             font-size: 12px;
         }
-      
+     
         .checkbox-item input {
             width: auto;
             margin-right: 5px;
         }
-      
+     
         button {
             padding: 8px;
             background-color: var(--accent-color);
@@ -194,18 +194,18 @@
             transition: background-color 0.3s;
             margin: 6px 3px;
         }
-      
+     
         button:hover {
             background-color: #2980b9;
         }
-      
+     
         .button-group {
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
             margin-top: 10px;
         }
-      
+     
         .result-item {
             display: flex;
             justify-content: space-between;
@@ -214,16 +214,16 @@
             border-bottom: 1px dashed var(--border-color);
             font-size: 13px;
         }
-      
+     
         .result-item:last-child {
             border-bottom: none; /* Corrigido: era "=" em vez de ":" */
         }
-      
+     
         .result-label, .result-value {
             font-weight: 600;
             color: var(--header-color);
         }
-      
+     
         .total {
             font-size: 16px;
             color: var(--error-color);
@@ -231,42 +231,42 @@
             padding-top: 10px;
             border-top: 1px solid var(--border-color);
         }
-      
+     
         .table-container {
             margin-top: 20px;
             overflow-x: auto;
         }
-      
+     
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
         }
-      
+     
         th, td {
             padding: 8px 10px;
             text-align: center;
             border: 1px solid var(--border-color);
         }
-      
+     
         th {
             background-color: var(--accent-color);
             color: white;
             font-weight: 600;
         }
-      
+     
         tr:nth-child(even) {
             background-color: var(--section-bg);
         }
-      
+     
         tr:hover {
             background-color: var(--highlight-bg);
         }
-      
+     
         .editable-cell {
             background-color: var(--highlight-bg);
         }
-      
+     
         .editable-cell input {
             width: 90%;
             padding: 3px;
@@ -275,7 +275,7 @@
             background-color: var(--container-bg);
             color: var(--text-color);
         }
-      
+     
         .note {
             margin-top: 10px;
             padding: 10px;
@@ -283,44 +283,44 @@
             border-left: 3px solid #ffc107;
             font-size: 12px;
         }
-      
+     
         .edit-buttons {
             margin: 10px 0;
             text-align: center;
         }
-      
+     
         .save-btn {
             background-color: #27ae60;
         }
-      
+     
         .save-btn:hover {
             background-color: #219653;
         }
-      
+     
         .reset-btn {
             background-color: var(--error-color);
         }
-      
+     
         .reset-btn:hover {
             background-color: #c0392b;
         }
-      
+     
         .copy-btn {
             background-color: #9b59b6;
             margin-top: 6px;
             width: 100%;
         }
-      
+     
         .copy-btn:hover {
             background-color: #8e44ad;
         }
-      
+     
         .tribut-form, .frete-form {
             display: grid;
             grid-template-columns: 1fr;
             gap: 10px;
         }
-      
+     
         .success-message {
             background-color: var(--success-bg);
             color: #155724;
@@ -331,7 +331,7 @@
             display: none;
             font-size: 12px;
         }
-      
+     
         .theme-toggle {
             position: fixed;
             top: 10px;
@@ -350,12 +350,12 @@
             transition: all 0.3s;
             z-index: 1000;
         }
-      
+     
         .theme-toggle:hover {
             background-color: var(--accent-color);
             color: white;
         }
-      
+     
         .theme-toggle[data-theme="dark"] {
             color: var(--accent-color);
         }
@@ -457,11 +457,11 @@
 </head>
 <body>
     <button class="theme-toggle" id="themeToggle" title="Alternar tema">☀️</button>
-  
+ 
     <div class="container">
         <h1>Calculadora de Pedágios, Tributos e Frete</h1>
         <p class="description">Calcule pedágios, tributos (Advalorem e GRISS) e frete com ajustes</p>
-      
+     
         <div class="main-content">
             <div class="input-section">
                 <h2>Cálculo de Pedágios</h2>
@@ -477,20 +477,20 @@
                         <option value="carreta7">CARRETA (7 eixos - Duplo)</option>
                     </select>
                 </div>
-              
+             
                 <div class="form-group">
                     <label>Trechos de pedágio:</label>
                     <div class="checkbox-group">
                         <!-- Checkboxes serão populados via JavaScript -->
                     </div>
                 </div>
-              
+             
                 <div class="button-group">
                     <button id="calculateBtn">Calcular</button>
                     <button id="selectAllBtn">Selecionar Todos</button>
                     <button id="clearAllBtn">Limpar</button>
                 </div>
-              
+             
                 <div class="result-section">
                     <h3>Resultado</h3>
                     <div class="result-item">
@@ -513,12 +513,12 @@
                         <span class="result-label">TOTAL:</span>
                         <span class="result-value" id="resultTotal">R$ 0,00</span>
                     </div>
-                  
+                 
                     <button id="copyTollBtn" class="copy-btn">Copiar</button>
                     <div id="tollCopySuccess" class="success-message">Copiado!</div>
                 </div>
             </div>
-          
+         
             <div class="tribut-section">
                 <h2>Cálculo de Tributos</h2>
                 <div class="tribut-form">
@@ -543,7 +543,7 @@
                         <button id="calculateTributBtn">Calcular</button>
                     </div>
                 </div>
-              
+             
                 <div class="tribut-result">
                     <h3>Resultado</h3>
                     <div class="result-item">
@@ -562,14 +562,14 @@
                         <span class="result-label">Total:</span>
                         <span class="result-value" id="resultTotalTribut">R$ 0,00</span>
                     </div>
-                  
+                 
                     <button id="copyAdvaloremBtn" class="copy-btn">Copiar Advalorem</button>
                     <button id="copyGrissBtn" class="copy-btn">Copiar GRISS</button>
                     <button id="copyTributBtn" class="copy-btn">Copiar Tudo</button>
                     <div id="tributCopySuccess" class="success-message">Copiado!</div>
                 </div>
             </div>
-          
+         
             <div class="frete-section">
                 <h2>Cálculo de Frete</h2>
                 <div class="frete-form">
@@ -601,7 +601,7 @@
                         <p id="info-frete"></p>
                     </div>
                 </div>
-              
+             
                 <div class="frete-result">
                     <h3>Resultado</h3>
                     <div class="result-item">
@@ -620,13 +620,13 @@
                         <span class="result-label">Final:</span>
                         <span class="result-value" id="resultFreteTotal">R$ 0,00</span>
                     </div>
-                  
+                 
                     <button id="copyFreteBtn" class="copy-btn">Copiar</button>
                     <div id="freteCopySuccess" class="success-message">Copiado!</div>
                 </div>
             </div>
         </div>
-      
+     
         <div class="table-container">
             <h2>Tabela de Pedágios (Editável)</h2>
             <p>Valores incluem taxa de 15%</p>
@@ -850,7 +850,7 @@
             const resetTableBtn = document.getElementById('resetTableBtn');
             const addColumnBtn = document.getElementById('addColumnBtn');
             const tollTable = document.getElementById('tollTable');
-          
+         
             // Elementos da interface (tributos e frete base)
             const calculateTributBtn = document.getElementById('calculateTributBtn');
             const addNfBtn = document.getElementById('addNfBtn');
@@ -863,42 +863,42 @@
             const subtractFreteBtn = document.getElementById('subtractFreteBtn');
             const copyFreteBtn = document.getElementById('copyFreteBtn');
             const addNewClientBtn = document.getElementById('addNewClientBtn');
-          
+         
             const nfValueInput = document.getElementById('nfValue');
             const additionalNfValueInput = document.getElementById('additionalNfValue');
             const advaloremPercentInput = document.getElementById('advaloremPercent');
             const grissPercentInput = document.getElementById('grissPercent');
             const freteValueInput = document.getElementById('freteValue');
-          
+         
             const clientFreightContainer = document.getElementById('clientFreightContainer');
-          
+         
             // Elementos para export/import
             const exportDataBtn = document.getElementById('exportDataBtn');
             const importDataBtn = document.getElementById('importDataBtn');
             const importFile = document.getElementById('importFile');
-          
+         
             // Elemento para toggle gerenciamento
             const toggleFreteMgmt = document.getElementById('toggleFreteMgmt');
             const freteMgmtContainer = document.getElementById('frete-mgmt-container');
-          
+         
             // Carregar valores salvos
             nfValueInput.value = loadData('nfValue', '') || '';
             advaloremPercentInput.value = loadData('advaloremPercent', '0.10');
             grissPercentInput.value = loadData('grissPercent', '0.05');
             freteValueInput.value = loadData('freteValue', '') || '';
-          
+         
             // Carregar estado do toggle
             const isCollapsed = loadData('freteMgmtCollapsed', false);
             if (isCollapsed) {
                 freteMgmtContainer.classList.add('mgmt-collapsed');
                 toggleFreteMgmt.textContent = 'Expandir';
             }
-          
+         
             // Inicializar tema
             const savedTheme = loadData('theme', 'light');
             document.documentElement.setAttribute('data-theme', savedTheme);
             updateThemeToggle(savedTheme);
-          
+         
             // Listeners (pedágios)
             calculateBtn.addEventListener('click', calculateToll);
             selectAllBtn.addEventListener('click', selectAllSegments);
@@ -908,7 +908,7 @@
             cancelEditBtn.addEventListener('click', cancelTableEditing);
             resetTableBtn.addEventListener('click', resetTableValues);
             addColumnBtn.addEventListener('click', addNewColumn);
-          
+         
             // Listeners (tributos e frete)
             calculateTributBtn.addEventListener('click', calculateTribut);
             addNfBtn.addEventListener('click', addAdditionalNf);
@@ -920,15 +920,15 @@
             addFrete20Btn.addEventListener('click', () => calculateFrete('add20'));
             subtractFreteBtn.addEventListener('click', () => calculateFrete('subtract'));
             copyFreteBtn.addEventListener('click', copyFreteValue);
-          
+         
             // Listener para novo cliente
             addNewClientBtn.addEventListener('click', addNewClient);
-          
+         
             // Listeners para export/import
             exportDataBtn.addEventListener('click', exportData);
             importDataBtn.addEventListener('click', () => importFile.click());
             importFile.addEventListener('change', handleImportFile);
-          
+         
             // Listener para toggle gerenciamento
             toggleFreteMgmt.addEventListener('click', function() {
                 freteMgmtContainer.classList.toggle('mgmt-collapsed');
@@ -936,36 +936,36 @@
                 this.textContent = collapsed ? 'Expandir' : 'Minimizar';
                 saveData('freteMgmtCollapsed', collapsed);
             });
-          
+         
             advaloremPercentInput.addEventListener('input', function() {
                 const displayVal = parseFloat(this.value || 0).toFixed(2).replace('.', ',');
                 document.getElementById('advaloremPercentDisplay').textContent = displayVal;
                 saveData('advaloremPercent', this.value);
             });
-          
+         
             grissPercentInput.addEventListener('input', function() {
                 const displayVal = parseFloat(this.value || 0).toFixed(2).replace('.', ',');
                 document.getElementById('grissPercentDisplay').textContent = displayVal;
                 saveData('grissPercent', this.value);
             });
-          
+         
             nfValueInput.addEventListener('input', handleNfInput);
             nfValueInput.addEventListener('blur', handleNfBlur);
-          
+         
             additionalNfValueInput.addEventListener('input', handleNfInput);
             additionalNfValueInput.addEventListener('blur', handleAdditionalNfBlur);
-          
+         
             freteValueInput.addEventListener('input', handleFreteInput);
             freteValueInput.addEventListener('blur', handleFreteBlur);
-          
+         
             document.getElementById('themeToggle').addEventListener('click', toggleTheme);
             document.getElementById('vehicleType').addEventListener('change', calculateToll);
-          
+         
             // Listener para seletor de frete
             document.getElementById('cliente-select').addEventListener('change', handleClienteChange);
             document.getElementById('rota-select').addEventListener('change', handleRotaChange);
             document.getElementById('veiculo-select').addEventListener('change', handleVeiculoChange);
-          
+         
             // Inicializar
             populateCheckboxes();
             populateTable();
@@ -974,13 +974,13 @@
             calculateToll();
             calculateTribut();
             calculateFrete();
-          
+         
             // Inicializar displays com vírgula após carregar valores
             const advaloremDisplayVal = parseFloat(advaloremPercentInput.value || 0).toFixed(2).replace('.', ',');
             const grissDisplayVal = parseFloat(grissPercentInput.value || 0).toFixed(2).replace('.', ',');
             document.getElementById('advaloremPercentDisplay').textContent = advaloremDisplayVal;
             document.getElementById('grissPercentDisplay').textContent = grissDisplayVal;
-          
+         
             function loadData(key, defaultValue) {
                 const item = localStorage.getItem(key);
                 if (item === null) return defaultValue;
@@ -990,11 +990,11 @@
                     return defaultValue;
                 }
             }
-          
+         
             function saveData(key, value) {
                 localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
             }
-          
+         
             // Função para sincronizar array e clients
             function syncFreteData() {
                 freteDataArray = [];
@@ -1016,7 +1016,7 @@
                 saveData('freteDataArray', freteDataArray);
                 saveData('freteClients', freteClients);
             }
-          
+         
             // Função para exportar dados
             function exportData() {
                 const data = {
@@ -1041,7 +1041,7 @@
                 URL.revokeObjectURL(url);
                 alert('Dados exportados com sucesso! Baixe o arquivo JSON.');
             }
-          
+         
             // Função para importar dados
             function handleImportFile(e) {
                 const file = e.target.files[0];
@@ -1063,109 +1063,109 @@
                 };
                 reader.readAsText(file);
             }
-          
+         
             // Funções para pedágios (mantidas iguais)
             function populateCheckboxes() {
                 const checkboxGroup = document.querySelector('.checkbox-group');
                 checkboxGroup.innerHTML = '';
-              
+             
                 segments.forEach(seg => {
                     const div = document.createElement('div');
                     div.className = 'checkbox-item';
                     div.innerHTML = `<input type="checkbox" id="${seg.key}" value="${seg.key}"><label for="${seg.key}">${seg.name}</label>`;
                     checkboxGroup.appendChild(div);
                 });
-              
+             
                 document.querySelectorAll('.checkbox-item input').forEach(cb => {
                     cb.addEventListener('change', calculateToll);
                 });
             }
-          
+         
             function populateTable() {
                 const thead = tollTable.querySelector('thead tr');
                 while (thead.children.length > 2) {
                     thead.removeChild(thead.lastChild);
                 }
-              
+             
                 segments.forEach(seg => {
                     const th = document.createElement('th');
                     th.textContent = seg.name;
                     thead.appendChild(th);
                 });
-              
+             
                 const tbody = tollTable.querySelector('tbody');
                 tbody.innerHTML = '';
-              
+             
                 const rowOrder = ['pickup', 'sprinter', 'toco', 'truck', 'carreta5', 'carreta6', 'carreta7'];
-              
+             
                 rowOrder.forEach(vehicleKey => {
                     const vehicle = tollData[vehicleKey];
                     const row = document.createElement('tr');
-                  
+                 
                     const nameCell = document.createElement('td');
                     nameCell.textContent = vehicle.name;
                     row.appendChild(nameCell);
-                  
+                 
                     const eixosCell = document.createElement('td');
                     eixosCell.textContent = vehicle.eixos;
                     row.appendChild(eixosCell);
-                  
+                 
                     segments.forEach(segment => {
                         const valueCell = document.createElement('td');
                         valueCell.className = 'editable-cell';
                         valueCell.dataset.vehicle = vehicleKey;
                         valueCell.dataset.segment = segment.key;
-                      
+                     
                         const input = document.createElement('input');
                         input.type = 'text';
                         const val = vehicle.values[segment.key] || 0;
                         input.value = formatCurrencyValue(val);
                         input.disabled = true;
-                      
+                     
                         valueCell.appendChild(input);
                         row.appendChild(valueCell);
                     });
-                  
+                 
                     tbody.appendChild(row);
                 });
             }
-          
+         
             function addNewColumn() {
                 const name = prompt('Nome da nova rota:');
                 if (!name || name.trim() === '') return;
-              
+             
                 const newKey = 'extra_' + Date.now();
                 const newSeg = {key: newKey, name: name.trim()};
-              
+             
                 segments.push(newSeg);
-              
+             
                 Object.keys(tollData).forEach(vk => {
                     tollData[vk].values[newKey] = 0;
                 });
-              
+             
                 segmentNames[newKey] = name.trim();
-              
+             
                 populateCheckboxes();
                 populateTable();
-              
+             
                 saveData('segments', segments);
                 saveData('tollData', tollData);
-              
+             
                 alert('Nova coluna adicionada com sucesso!');
             }
-          
+         
             function enableTableEditing() {
                 const inputs = tollTable.querySelectorAll('input');
                 inputs.forEach(input => {
                     input.disabled = false;
                     input.parentElement.classList.add('editing');
                 });
-              
+             
                 editTableBtn.style.display = 'none';
                 saveTableBtn.style.display = 'inline-block';
                 cancelEditBtn.style.display = 'inline-block';
             }
-          
+         
             function saveTableValues() {
                 const inputs = tollTable.querySelectorAll('input');
                 inputs.forEach(input => {
@@ -1173,34 +1173,34 @@
                     input.parentElement.classList.remove('editing');
                     const vehicleKey = input.parentElement.dataset.vehicle;
                     const segmentKey = input.parentElement.dataset.segment;
-                  
+                 
                     const rawValue = input.value.replace('R$ ', '').trim();
                     const value = parseFloat(rawValue.replace(',', '.'));
-                  
+                 
                     if (!isNaN(value)) {
                         tollData[vehicleKey].values[segmentKey] = value;
                         input.value = formatCurrencyValue(value);
                     }
                 });
-              
+             
                 saveData('tollData', tollData);
-              
+             
                 editTableBtn.style.display = 'inline-block';
                 saveTableBtn.style.display = 'none';
                 cancelEditBtn.style.display = 'none';
-              
+             
                 calculateToll();
-              
+             
                 alert('Valores atualizados com sucesso!');
             }
-          
+         
             function cancelTableEditing() {
                 populateTable();
                 editTableBtn.style.display = 'inline-block';
                 saveTableBtn.style.display = 'none';
                 cancelEditBtn.style.display = 'none';
             }
-          
+         
             function resetTableValues() {
                 if (confirm('Tem certeza que deseja restaurar os valores originais? Isso removerá colunas extras adicionadas.')) {
                     segments = JSON.parse(JSON.stringify(originalSegments));
@@ -1215,11 +1215,11 @@
                     alert('Valores restaurados com sucesso!');
                 }
             }
-          
+         
             // Funções para fretes por cliente
             function populateFreightTables() {
                 clientFreightContainer.innerHTML = '';
-              
+             
                 Object.keys(freteClients).forEach(clientName => {
                     const section = createClientSection(clientName, freteClients[clientName]);
                     clientFreightContainer.appendChild(section);
@@ -1474,13 +1474,13 @@
                 popularClientes();
                 alert(`Cliente "${nomeCliente}" criado! Edite a tabela.`);
             }
-          
+         
             // Funções para seletor de frete (usando array)
             function popularClientes() {
                 const selectCliente = document.getElementById('cliente-select');
                 const uniqueClientes = [...new Set(freteDataArray.map(entry => entry.cliente))];
                 selectCliente.innerHTML = '<option value="">Escolha um cliente...</option>';
-              
+             
                 uniqueClientes.forEach(cliente => {
                     const option = document.createElement('option');
                     option.value = cliente;
@@ -1488,25 +1488,25 @@
                     selectCliente.appendChild(option);
                 });
             }
-          
+         
             function handleClienteChange() {
                 const nomeCliente = this.value;
                 const selectRota = document.getElementById('rota-select');
                 const selectVeiculo = document.getElementById('veiculo-select');
                 const btnPuxar = document.getElementById('puxar-frete-btn');
-              
+             
                 selectRota.innerHTML = '<option value="">Escolha uma rota...</option>';
                 selectVeiculo.innerHTML = '<option value="">Escolha o veículo...</option>';
                 selectRota.disabled = !nomeCliente;
                 selectVeiculo.disabled = true;
                 btnPuxar.disabled = true;
-              
+             
                 if (nomeCliente) {
                     const rotasCliente = freteDataArray
                         .filter(entry => entry.cliente === nomeCliente)
                         .map(entry => ({origem: entry.origem, destino: entry.destino}))
                         .filter((rota, index, self) => index === self.findIndex(r => r.origem === rota.origem && r.destino === rota.destino));
-                  
+                 
                     rotasCliente.forEach(rota => {
                         const option = document.createElement('option');
                         option.value = JSON.stringify(rota);
@@ -1515,24 +1515,24 @@
                     });
                 }
             }
-          
+         
             function handleRotaChange() {
                 const dadosRota = JSON.parse(this.value || '{}');
                 const selectVeiculo = document.getElementById('veiculo-select');
                 const btnPuxar = document.getElementById('puxar-frete-btn');
                 const nomeCliente = document.getElementById('cliente-select').value;
-              
+             
                 selectVeiculo.innerHTML = '<option value="">Escolha o veículo...</option>';
                 selectVeiculo.disabled = !dadosRota.origem;
                 btnPuxar.disabled = true;
-              
+             
                 if (dadosRota.origem && nomeCliente) {
                     const veiculosRota = freteDataArray.filter(entry =>
                         entry.cliente === nomeCliente &&
                         entry.origem === dadosRota.origem &&
                         entry.destino === dadosRota.destino
                     );
-                  
+                 
                     veiculosRota.forEach(veiculo => {
                         const option = document.createElement('option');
                         option.value = JSON.stringify({tipo: veiculo.tipo, frete: veiculo.freteAtual, adv: veiculo.adv});
@@ -1541,34 +1541,34 @@
                     });
                 }
             }
-          
+         
             function handleVeiculoChange() {
                 document.getElementById('puxar-frete-btn').disabled = !this.value;
             }
-          
+         
             window.puxarFrete = function() {
                 const dadosVeiculoStr = document.getElementById('veiculo-select').value;
                 const dadosVeiculo = JSON.parse(dadosVeiculoStr || '{}');
                 if (!dadosVeiculo.frete) return;
-              
+             
                 const freteValue = dadosVeiculo.frete.toFixed(2).replace('.', ',');
                 freteValueInput.value = freteValue;
                 saveData('freteValue', freteValue);
-              
+             
                 // Puxar ADV para Advalorem
                 const advNum = parseFloat(dadosVeiculo.adv).toFixed(2);
                 const advPercentDisplay = advNum.replace('.', ',');
                 advaloremPercentInput.value = advNum;
                 saveData('advaloremPercent', advNum);
                 document.getElementById('advaloremPercentDisplay').textContent = advPercentDisplay;
-              
+             
                 calculateFrete();
                 calculateTribut();
-              
+             
                 document.getElementById('info-frete').textContent = `Frete base puxado: R$ ${dadosVeiculo.frete.toFixed(2)} | ADV puxado: ${advPercentDisplay}% (${dadosVeiculo.tipo})`;
                 document.getElementById('puxar-frete-btn').disabled = true;
             };
-          
+         
             // Funções para tributos e frete (mantidas iguais)
             function handleNfInput(e) {
                 let value = e.target.value.replace(/[^0-9,]/g, '');
@@ -1581,7 +1581,7 @@
                 }
                 e.target.value = value;
             }
-          
+         
             function handleNfBlur(e) {
                 let value = e.target.value;
                 if (value === '') {
@@ -1594,7 +1594,7 @@
                 saveData('nfValue', e.target.value);
                 calculateTribut();
             }
-          
+         
             function handleAdditionalNfBlur(e) {
                 let value = e.target.value;
                 if (value === '') {
@@ -1604,7 +1604,7 @@
                 let numValue = parseFloat(value.replace(',', '.')) || 0;
                 e.target.value = numValue.toFixed(2).replace('.', ',');
             }
-          
+         
             function handleFreteInput(e) {
                 let value = e.target.value.replace(/[^0-9,]/g, '');
                 if (value.includes(',')) {
@@ -1616,7 +1616,7 @@
                 }
                 e.target.value = value;
             }
-          
+         
             function handleFreteBlur(e) {
                 let value = e.target.value;
                 if (value === '') {
@@ -1629,7 +1629,7 @@
                 saveData('freteValue', e.target.value);
                 calculateFrete();
             }
-          
+         
             function addAdditionalNf() {
                 let nfValue = parseFloat(nfValueInput.value.replace(',', '.')) || 0;
                 let additionalNf = parseFloat(additionalNfValueInput.value.replace(',', '.')) || 0;
@@ -1639,7 +1639,7 @@
                 additionalNfValueInput.value = '';
                 calculateTribut();
             }
-          
+         
             function toggleTheme() {
                 const currentTheme = document.documentElement.getAttribute('data-theme');
                 const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -1651,24 +1651,24 @@
                     input.style.color = newTheme === 'dark' ? '#fff' : 'black';
                 });
             }
-          
+         
             function updateThemeToggle(theme) {
                 const toggle = document.getElementById('themeToggle');
                 toggle.textContent = theme === 'dark' ? '☀️' : '🌙';
                 toggle.title = theme === 'dark' ? 'Modo claro' : 'Modo escuro';
             }
-          
+         
             function calculateToll() {
                 const vehicleType = document.getElementById('vehicleType').value;
                 const selectedSegments = [];
-              
+             
                 const checkboxes = document.querySelectorAll('.checkbox-item input');
                 checkboxes.forEach(checkbox => {
                     if (checkbox.checked) {
                         selectedSegments.push(checkbox.value);
                     }
                 });
-              
+             
                 let totalToll = 0;
                 selectedSegments.forEach(segment => {
                     const value = tollData[vehicleType].values[segment];
@@ -1676,47 +1676,47 @@
                         totalToll += value;
                     }
                 });
-              
+             
                 const baseValue = totalToll / 1.15;
                 const administrativeFee = totalToll - baseValue;
-              
+             
                 document.getElementById('resultVehicle').textContent = tollData[vehicleType].name;
-              
+             
                 if (selectedSegments.length > 0) {
                     const segmentNamesList = selectedSegments.map(seg => segmentNames[seg]).join(', ');
                     document.getElementById('resultSegments').textContent = segmentNamesList;
                 } else {
                     document.getElementById('resultSegments').textContent = 'Nenhum';
                 }
-              
+             
                 document.getElementById('resultToll').textContent = formatCurrency(totalToll);
                 document.getElementById('resultFee').textContent = formatCurrency(administrativeFee);
                 document.getElementById('resultTotal').textContent = formatCurrency(totalToll);
             }
-          
+         
             function calculateTribut() {
                 let nfValueStr = nfValueInput.value.replace(',', '.');
                 const nfValue = parseFloat(nfValueStr) || 0;
                 const advaloremPercent = parseFloat(advaloremPercentInput.value) || 0;
                 const grissPercent = parseFloat(grissPercentInput.value) || 0;
-              
+             
                 const advaloremValue = nfValue * (advaloremPercent / 100);
                 const grissValue = nfValue * (grissPercent / 100);
                 const totalTribut = advaloremValue + grissValue;
-              
+             
                 document.getElementById('resultNfValue').textContent = formatCurrency(nfValue);
                 document.getElementById('resultAdvalorem').textContent = formatCurrency(advaloremValue);
                 document.getElementById('resultGriss').textContent = formatCurrency(grissValue);
                 document.getElementById('resultTotalTribut').textContent = formatCurrency(totalTribut);
             }
-          
+         
             function calculateFrete(type = null) {
                 let freteValueStr = freteValueInput.value.replace(',', '.');
                 const freteValue = parseFloat(freteValueStr) || 0;
                 let freteTotal = freteValue;
                 let chemicalAdd = 0;
                 let dangerousAdd = 0;
-              
+             
                 if (type === 'add') {
                     chemicalAdd = freteValue * 0.3;
                     freteTotal = freteValue * 1.3;
@@ -1726,24 +1726,24 @@
                 } else if (type === 'subtract') {
                     freteTotal = freteValue * 0.7;
                 }
-              
+             
                 document.getElementById('resultFreteBase').textContent = formatCurrency(freteValue);
                 document.getElementById('resultFreteChemical').textContent = formatCurrency(chemicalAdd);
                 document.getElementById('resultFreteDangerous').textContent = formatCurrency(dangerousAdd);
                 document.getElementById('resultFreteTotal').textContent = formatCurrency(freteTotal);
             }
-          
+         
             function copyTollValues() {
                 const vehicleType = document.getElementById('vehicleType').value;
                 const selectedSegments = [];
-              
+             
                 const checkboxes = document.querySelectorAll('.checkbox-item input');
                 checkboxes.forEach(checkbox => {
                     if (checkbox.checked) {
                         selectedSegments.push(checkbox.value);
                     }
                 });
-              
+             
                 let totalToll = 0;
                 selectedSegments.forEach(segment => {
                     const value = tollData[vehicleType].values[segment];
@@ -1751,13 +1751,13 @@
                         totalToll += value;
                     }
                 });
-              
+             
                 const textToCopy = totalToll.toFixed(2).replace('.', ',');
-              
+             
                 copyToClipboard(textToCopy);
                 showSuccess('tollCopySuccess');
             }
-          
+         
             function copySingleValue(type) {
                 let nfValueStr = nfValueInput.value.replace(',', '.');
                 const nfValue = parseFloat(nfValueStr) || 0;
@@ -1773,30 +1773,30 @@
                 copyToClipboard(textToCopy);
                 showSuccess('tributCopySuccess');
             }
-          
+         
             function copyTributValues() {
                 let nfValueStr = nfValueInput.value.replace(',', '.');
                 const nfValue = parseFloat(nfValueStr) || 0;
                 const advaloremPercent = parseFloat(advaloremPercentInput.value) || 0;
                 const grissPercent = parseFloat(grissPercentInput.value) || 0;
-              
+             
                 const advaloremValue = nfValue * (advaloremPercent / 100);
                 const grissValue = nfValue * (grissPercent / 100);
                 const totalTribut = advaloremValue + grissValue;
-              
+             
                 const textToCopy = `${nfValue.toFixed(2).replace('.', ',')}\n${advaloremValue.toFixed(2).replace('.', ',')}\n${grissValue.toFixed(2).replace('.', ',')}\n${totalTribut.toFixed(2).replace('.', ',')}`;
-              
+             
                 copyToClipboard(textToCopy);
                 showSuccess('tributCopySuccess');
             }
-          
+         
             function copyFreteValue() {
                 const freteTotal = parseFloat(document.getElementById('resultFreteTotal').textContent.replace('R$ ', '').replace(',', '.')) || 0;
                 const textToCopy = freteTotal.toFixed(2).replace('.', ',');
                 copyToClipboard(textToCopy);
                 showSuccess('freteCopySuccess');
             }
-          
+         
             function copyToClipboard(text) {
                 navigator.clipboard.writeText(text).catch(() => {
                     const textarea = document.createElement('textarea');
@@ -1807,7 +1807,7 @@
                     document.body.removeChild(textarea);
                 });
             }
-          
+         
             function showSuccess(id) {
                 const message = document.getElementById(id);
                 message.style.display = 'block';
@@ -1815,23 +1815,23 @@
                     message.style.display = 'none';
                 }, 2000);
             }
-          
+         
             function selectAllSegments() {
                 const checkboxes = document.querySelectorAll('.checkbox-item input');
                 checkboxes.forEach(checkbox => checkbox.checked = true);
                 calculateToll();
             }
-          
+         
             function clearAllSegments() {
                 const checkboxes = document.querySelectorAll('.checkbox-item input');
                 checkboxes.forEach(checkbox => checkbox.checked = false);
                 calculateToll();
             }
-          
+         
             function formatCurrency(value) {
                 return 'R$ ' + value.toFixed(2).replace('.', ',');
             }
-          
+         
             function formatCurrencyValue(value) {
                 return value.toFixed(2).replace('.', ',');
             }
